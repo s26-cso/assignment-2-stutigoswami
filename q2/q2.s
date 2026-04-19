@@ -1,5 +1,6 @@
 .section .data
 fmt: .asciz "%ld "
+fmt_end:.asciz "%ld\n"
 
 .section .bss
     .align 3
@@ -137,7 +138,13 @@ print_loop:
     add  x6, x19, x5
     ld   x11, 0(x6)        # x11 = RES[i]
 
-    la   x10, fmt
+    addi x5, x8, -1        # x5 = n-1
+    beq  x22, x5, use_end_fmt
+    la   x10, fmt          # "%ld "
+    j    do_print
+use_end_fmt:
+    la   x10, fmt_end      # "%ld\n"
+do_print:
     call printf
 
     addi x22, x22, 1
